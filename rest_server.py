@@ -88,7 +88,7 @@ def add_task():
 
 	# save input data as json file
 	with open('input_data/'+task_id+'.json', 'w') as outfile:
-		json.dump(requestedTask.input_data, outfile)
+		json.dump(requestedTask['input_data'], outfile)
 
 	print("New task (ID:{}) added".format(task_id))
 
