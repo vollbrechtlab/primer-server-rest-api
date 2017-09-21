@@ -51,8 +51,8 @@ def get_result(task_id):
 		JSON of the result
 	"""
 
-	inputPath = 'input_data/'+task_id+'_input.json'
-	resultPath = 'result_data/'+task_id+'_result.json'
+	inputPath = task_id+'_input.json'
+	resultPath = task_id+'_result.json'
 
 	try: # result file exists
 		# load result data and return it
@@ -81,7 +81,7 @@ def add_task():
 	# make a new task ID
 	task_id = idGenerator()
 
-	inputPath = 'input_data/'+task_id+'_input.json'
+	inputPath = task_id+'_input.json'
 
 	# save input data as json file
 	with open(inputPath, 'w') as outfile:
