@@ -6,13 +6,11 @@
 	Description: Rest server with only POST 
 """
 
+import json
 from flask import Flask, jsonify, abort, request, make_response, url_for, send_file, send_from_directory, Response
-import datetime
-import time
 from primer3_utilities import *
 from flask_cors import CORS
-import json
-
+from rest_server_utility import *
 
 # Flask app
 app = Flask(__name__, static_url_path = "")
@@ -46,48 +44,47 @@ def welcome():
 @app.route('/result/<string:task_id>', methods = ['GET'])
 def get_result(task_id):
 	""" Handle GET request to get a specific result
+		Calculate the primer and return it
 	Args:
 		param1: Task ID
 	Returns:
 		JSON of the result
 	"""
 
-	# Get json data from database
-	result = dbManager.getP3Result(task_id)
+	inputPath = 'input_data/'+task_id+'_input.json'
+	resultPath = 'result_data/'+task_id+'_result.json'
 
-	if(result['status'] == 'does not exist'):
-		abort(404)
-
-	if(result['status'] == 'ok'):
-		# read the parameters followed by "?"
-		params = dict(request.args)
-		if 'format' in params:
-			if params['format'] == ['csv']:
-				# return the response of the CSV file
-				return createCsvRes('result_data/', '{}.csv'.format(task_id), result['result'])
-
-			if params['format'] == ['raw']:
-				print('a')
-				return jsonify(result)
-
-	return jsonify(createBetterP3Result(result))
+	try: # result file exists
+		# load result data and return it
+		resultFile = open(resultPath, 'r')
+		result = json.load(resultFile)
+		return jsonify(result)
+	except Exception as e: # result file does not exist
+		try: # input file exists
+			findPrimersFromFile(inputPath, resultPath, "better")
+			resultFile = open(resultPath, 'r')
+			result = json.load(resultFile)
+			return jsonify(result)
+		except: # input file does not exist
+			abort(404)
 
 
 @app.route('/', methods = ['POST'])
 def add_task():
 	""" Handle POST request to add an new primer3 task
 	Returns:
-		Successful: {'status': 'ok','result_url': 'url where result will be reported'} 
-		Failed: {'status': 'error','error': 'error explanation'} 
+		Url of the result
 	"""
 
 	requestedTask = request.json
 
 	# make a new task ID
-	task_id = datetime.datetime.now().isoformat()
+	task_id = idGenerator()
+
+	inputPath = 'input_data/'+task_id+'_input.json'
 
 	# save input data as json file
-	with open('input_data/'+task_id+'.json', 'w') as outfile:
+	with open(inputPath, 'w') as outfile:
 		json.dump(requestedTask['input_data'], outfile)
 
 	print("New task (ID:{}) added".format(task_id))
@@ -96,6 +93,6 @@ def add_task():
 	return jsonify( { 'result_url': url_for('get_result', task_id = task_id, _external = True), 'status': 'ok' } ), 201
 
 if __name__ == '__main__':
-	app.run(debug = True, port=3043)
+	app.run(debug = True, port=5000)
 	#app.run(host='0.0.0.0', port='3043')
 

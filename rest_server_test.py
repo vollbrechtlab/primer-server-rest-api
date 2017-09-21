@@ -31,7 +31,7 @@ def test_ok2():
 	pprint(r.json())
 
 def test_ok():
-	url = 'http://localhost:3043'
+	url = 'http://localhost:5000'
 	task = {
 		'task_info': {
 			'format':'better'

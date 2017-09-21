@@ -98,18 +98,20 @@ def findPrimersFromFile(inputPath, outputPath, resultFormat="raw"):
 		param2: output json location
 		param3: result format
 	"""
-	with open(inputPath, 'r') as inputfile:   
+	try:
+		inputFile = open(inputPath, 'r')
 		inputData = None
 		try: 
-			inputData = json.load(inputfile)
+			inputData = json.load(inputFile)
 		except:
-			print('Input JSON file is broken. No output generated')
-			return
+			raise Exception('Input JSON file is broken. No output file generated')
 
 		result = findPrimers(inputData, resultFormat)
 		if result is not None:
 			with open(outputPath, 'w') as outputfile:
 				json.dump(result, outputfile, sort_keys = True, indent = 4, ensure_ascii = False)
 				print('Output saved to {}'.format(outputPath))
-		
+
+	except:
+		raise Exception("Input file does not exist")
 		
