@@ -1,2 +1,2 @@
 #!/bin/bash
-gunicorn -w 2 -b 0.0.0.0:5000 rest_server:app
+venv/bin/gunicorn -b 0.0.0.0:8001 rest_server:app
