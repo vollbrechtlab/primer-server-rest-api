@@ -1,0 +1,31 @@
+[2017-09-21 17:03:44 -0500] [11931] [INFO] Starting gunicorn 19.7.1
+[2017-09-21 17:03:44 -0500] [11931] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2017-09-21 17:03:44 -0500] [11931] [ERROR] Retrying in 1 second.
+[2017-09-21 17:03:45 -0500] [11931] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2017-09-21 17:03:45 -0500] [11931] [ERROR] Retrying in 1 second.
+[2017-09-21 17:03:46 -0500] [11931] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2017-09-21 17:03:46 -0500] [11931] [ERROR] Retrying in 1 second.
+[2017-09-21 17:03:47 -0500] [11931] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2017-09-21 17:03:47 -0500] [11931] [ERROR] Retrying in 1 second.
+[2017-09-21 17:03:48 -0500] [11931] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2017-09-21 17:03:48 -0500] [11931] [ERROR] Retrying in 1 second.
+[2017-09-21 17:03:49 -0500] [11931] [ERROR] Can't connect to ('0.0.0.0', 5000)
+[2017-09-21 17:04:25 -0500] [12037] [INFO] Starting gunicorn 19.7.1
+[2017-09-21 17:04:25 -0500] [12037] [INFO] Listening at: http://0.0.0.0:5000 (12037)
+[2017-09-21 17:04:25 -0500] [12037] [INFO] Using worker: sync
+[2017-09-21 17:04:25 -0500] [12043] [INFO] Booting worker with pid: 12043
+[2017-09-21 17:04:25 -0500] [12044] [INFO] Booting worker with pid: 12044
+[2017-09-21 17:10:24 -0500] [12043] [INFO] Worker exiting (pid: 12043)
+[2017-09-21 17:10:24 -0500] [12648] [INFO] Booting worker with pid: 12648
+[2017-09-21 17:10:27 -0500] [12044] [INFO] Worker exiting (pid: 12044)
+[2017-09-21 17:10:27 -0500] [12658] [INFO] Booting worker with pid: 12658
+[2017-09-21 17:11:04 -0500] [12658] [INFO] Worker exiting (pid: 12658)
+[2017-09-21 17:11:04 -0500] [12711] [INFO] Booting worker with pid: 12711
+[2017-09-21 17:11:07 -0500] [12648] [INFO] Worker exiting (pid: 12648)
+[2017-09-21 17:11:07 -0500] [12721] [INFO] Booting worker with pid: 12721
+[2017-09-21 17:11:10 -0500] [12711] [INFO] Worker exiting (pid: 12711)
+[2017-09-21 17:11:10 -0500] [12730] [INFO] Booting worker with pid: 12730
+[2017-09-21 17:11:25 -0500] [12037] [INFO] Handling signal: term
+[2017-09-21 17:11:25 -0500] [12721] [INFO] Worker exiting (pid: 12721)
+[2017-09-21 17:11:25 -0500] [12730] [INFO] Worker exiting (pid: 12730)
+[2017-09-21 17:11:25 -0500] [12037] [INFO] Shutting down: Master
