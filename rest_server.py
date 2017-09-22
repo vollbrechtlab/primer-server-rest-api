@@ -6,7 +6,7 @@
 	Description: Rest server with only POST 
 """
 
-import json
+import json, os
 from flask import Flask, jsonify, abort, request, make_response, url_for, send_file, send_from_directory, Response
 from primer3_utilities import *
 from flask_cors import CORS
@@ -16,6 +16,9 @@ from rest_server_utility import *
 app = Flask(__name__, static_url_path = "")
 CORS(app)
 
+# create cache folder if doesnt exist
+if not os.path.exists("cache"):
+    os.makedirs("cache")
 
 """ Error Handling """
 
