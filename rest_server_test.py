@@ -85,4 +85,4 @@ def test_ok_dev_server():
 	pprint(r.json())
 
 if __name__ == '__main__':
-	test_ok()
+	test_ok2()

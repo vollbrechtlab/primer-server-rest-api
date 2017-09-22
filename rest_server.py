@@ -68,7 +68,12 @@ def get_result(task_id):
 			resultFile = open(resultPath, 'r')
 			result = json.load(resultFile)
 			return jsonify(result)
-		except: # input file does not exist
+		except Exception as e: # input file does not exist
+			taskResult = {}
+			taskResult['status'] = 'error'
+			taskResult['error_detail'] = str(e)
+			return jsonify(taskResult)
+		else:
 			abort(404)
 
 
@@ -88,7 +93,7 @@ def add_task():
 
 	# save input data as json file
 	with open(inputPath, 'w') as outfile:
-		json.dump(requestedTask['input_data'], outfile)
+		json.dump(requestedTask['input_data'], outfile, sort_keys = True, indent = 4, ensure_ascii = False)
 
 	print("New task (ID:{}) added".format(task_id))
 

@@ -69,7 +69,7 @@ def createBetterResult(result):
 	return betterResult
 
 
-def findPrimers(inputData, resultFormat="raw"):
+def findPrimers(inputData, resultFormat="better"):
 	""" return primer3 result with given format
 	Args: 
 		param1: input data
@@ -79,12 +79,12 @@ def findPrimers(inputData, resultFormat="raw"):
 	"""
 	p3pyInputData = transformInput(inputData)
 
-	result = None
+	result = {}
 	try:
 		result = designPrimers(p3pyInputData['seq_args'], p3pyInputData['global_args'])
-	except: # input data is broken
-		print('Input data is broken. Please check input data has the correct parameters')
-		return None
+	except Exception as e: # incorrect parameters
+		raise e
+		return result
 
 	if resultFormat == "better":
 		return createBetterResult(result);
@@ -105,13 +105,19 @@ def findPrimersFromFile(inputPath, outputPath, resultFormat="raw"):
 			inputData = json.load(inputFile)
 		except:
 			raise Exception('Input JSON file is broken. No output file generated')
+			return
 
-		result = findPrimers(inputData, resultFormat)
-		if result is not None:
+		try:
+			result = findPrimers(inputData, resultFormat)
 			with open(outputPath, 'w') as outputfile:
 				json.dump(result, outputfile, sort_keys = True, indent = 4, ensure_ascii = False)
-				print('Output saved to {}'.format(outputPath))
-
-	except:
-		raise Exception("Input file does not exist")
+			print('Result saved to {}'.format(outputPath))
+			return
+		except Exception as e:
+			raise e
+			return
+			
+	except Exception as e:
+		raise Exception('wtf')
+		return
 		
