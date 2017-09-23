@@ -9,6 +9,7 @@
 from primer3.bindings import designPrimers
 import json
 
+
 def transformInput(data):
 	""" separate input to seq_args and global_args
 	Args: 
@@ -26,6 +27,7 @@ def transformInput(data):
 			p3py_data['global_args'][key.upper()] = data[key]
 
 	return p3py_data
+
 
 def createBetterResult(result):
 	""" Create a primer3 result in a better format
@@ -69,7 +71,7 @@ def createBetterResult(result):
 	return betterResult
 
 
-def findPrimers(inputData, resultFormat="raw"):
+def findPrimers(inputData, resultFormat="better"):
 	""" return primer3 result with given format
 	Args: 
 		param1: input data
@@ -79,39 +81,50 @@ def findPrimers(inputData, resultFormat="raw"):
 	"""
 	p3pyInputData = transformInput(inputData)
 
-	result = None
+	result = {}
 	try:
 		result = designPrimers(p3pyInputData['seq_args'], p3pyInputData['global_args'])
 	except: # input data is broken
-		print('Input data is broken. Please check input data has the correct parameters')
-		return None
+		raise Exception('input data does not have correct parameters')
 
 	if resultFormat == "better":
 		return createBetterResult(result);
 
 	return result
 
-def findPrimersFromFile(inputPath, outputPath, resultFormat="raw"):
+
+def findPrimersFromFile(inputPath, outputPath, resultFormat="better"):
 	""" Create a primer3 result in a better format
 	Args: 
 		param1: input json location
 		param2: output json location
-		param3: result format
+		param3: result of task
 	"""
-	try:
+
+	inputFile = None
+	try: 
 		inputFile = open(inputPath, 'r')
-		inputData = None
-		try: 
-			inputData = json.load(inputFile)
-		except:
-			raise Exception('Input JSON file is broken. No output file generated')
+	except IOError as e:
+		raise Exception("input file does not exist")
 
-		result = findPrimers(inputData, resultFormat)
-		if result is not None:
-			with open(outputPath, 'w') as outputfile:
-				json.dump(result, outputfile, sort_keys = True, indent = 4, ensure_ascii = False)
-				print('Output saved to {}'.format(outputPath))
-
+	inputData = None
+	try: 
+		inputData = json.load(inputFile)
 	except:
-		raise Exception("Input file does not exist")
+		raise Exception('input JSON data is broken')
+
+	taskResult = {}
+	try:
+		taskResult['result'] = findPrimers(inputData, resultFormat)
+	except Exception as e:
+		taskResult['status'] = 'error'
+		taskResult['error_statement'] = str(e)
+	else:
+		taskResult['status'] = 'ok'
+
+	# save the result to a file
+	with open(outputPath, 'w') as outputFile:
+		json.dump(taskResult, outputFile, sort_keys = True, indent = 4, ensure_ascii = False)
+
+	
 		

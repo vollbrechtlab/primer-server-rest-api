@@ -3,7 +3,7 @@
 """
 	Author: Takao Shibamoto
 	Date: 9/18/2017
-	Description: Rest server with only POST 
+	Description: REST server with only POST 
 """
 
 import json, os
@@ -16,7 +16,7 @@ from rest_server_utility import *
 app = Flask(__name__, static_url_path = "")
 CORS(app)
 
-# create cache folder if doesnt exist
+# create cache folder if it doesnt exist yet
 if not os.path.exists("cache"):
     os.makedirs("cache")
 
@@ -41,7 +41,7 @@ def not_found(error):
 def welcome():
 	""" Say welcome
 	"""
-	return "Welcome to our primer3 rest API"
+	return "Welcome to our primer3 REST API"
 
 
 @app.route('/result/<string:task_id>', methods = ['GET'])
@@ -59,17 +59,25 @@ def get_result(task_id):
 
 	try: # result file exists
 		# load result data and return it
-		resultFile = open(resultPath, 'r')
-		result = json.load(resultFile)
-		return jsonify(result)
-	except Exception as e: # result file does not exist
+		resultFile = open(resultPath, 'r') 
+		
+	except IOError as e: # result file does not exist
 		try: # input file exists
-			findPrimersFromFile(inputPath, resultPath, "better")
+			findPrimersFromFile(inputPath, resultPath, 'better')
+		except Exception as e: # input file does not exist
+			abort(404)
+		else: 
 			resultFile = open(resultPath, 'r')
 			result = json.load(resultFile)
 			return jsonify(result)
-		except: # input file does not exist
-			abort(404)
+
+	else: # no exception
+		try:
+			result = json.load(resultFile)
+		except Exception as e:
+			raise Exception('result file is broken')
+		else:
+			return jsonify(result)
 
 
 @app.route('/', methods = ['POST'])
@@ -86,6 +94,11 @@ def add_task():
 
 	inputPath = 'cache/'+task_id+'_input.json'
 
+	try:
+		inputData = requestedTask['input_data']
+	except KeyError as e: # input_data doesn't exist
+		return jsonify( { 'status':'error', 'error_statement': 'task JSON doesn\'t have input_data field'} ), 400
+
 	# save input data as json file
 	with open(inputPath, 'w') as outfile:
 		json.dump(requestedTask['input_data'], outfile)
@@ -93,7 +106,8 @@ def add_task():
 	print("New task (ID:{}) added".format(task_id))
 
 	# return the URL of the result
-	return jsonify( { 'result_url': url_for('get_result', task_id = task_id, _external = True), 'status': 'ok' } ), 201
+	return jsonify( { 'status': 'ok', 'result_url': url_for('get_result', task_id = task_id, _external = True) } ), 201
+
 
 if __name__ == '__main__':
 	app.run(debug = True, port=5000)
