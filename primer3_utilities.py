@@ -93,38 +93,42 @@ def findPrimers(inputData, resultFormat="better"):
 	return result
 
 
-def findPrimersFromFile(inputPath, outputPath, resultFormat="better"):
+def findPrimersFromFile(taskPath, taskResultPath):
 	""" Create a primer3 result in a better format
 	Args: 
 		param1: input json location
 		param2: output json location
-		param3: result of task
 	"""
 
-	inputFile = None
+	taskFile = None
 	try: 
-		inputFile = open(inputPath, 'r')
+		taskFile = open(taskPath, 'r')
 	except IOError as e:
 		raise Exception("input file does not exist")
 
-	inputData = None
-	try: 
-		inputData = json.load(inputFile)
+	task = None
+	try: # try to load input json file
+		task = json.load(taskFile)
 	except:
 		raise Exception('input JSON data is broken')
 
 	taskResult = {}
-	try:
-		taskResult['result'] = findPrimers(inputData, resultFormat)
+	try: # try to get result
+		if 'format' in task:
+			taskResult['result'] = findPrimers(task['input_data'], task['format'])
+		else:
+			taskResult['result'] = findPrimers(task['input_data'], task['format'])
+	
 	except Exception as e:
 		taskResult['status'] = 'error'
 		taskResult['error_statement'] = str(e)
-	else:
+	
+	else: # no problem
 		taskResult['status'] = 'ok'
 
 	# save the result to a file
-	with open(outputPath, 'w') as outputFile:
-		json.dump(taskResult, outputFile, sort_keys = True, indent = 4, ensure_ascii = False)
+	with open(taskResultPath, 'w') as newTaskResultFile:
+		json.dump(taskResult, newTaskResultFile, sort_keys = True, indent = 4, ensure_ascii = False)
 
 	
 		

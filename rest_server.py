@@ -51,57 +51,55 @@ def get_result(task_id):
 	Args:
 		param1: Task ID
 	Returns:
-		JSON of the result
+		JSON of the task result
 	"""
 
-	inputPath = 'cache/'+task_id+'_input.json'
-	resultPath = 'cache/'+task_id+'_result.json'
+	taskPath = 'cache/'+task_id+'_task.json'
+	taskResultPath = 'cache/'+task_id+'_taskResult.json'
 
 	try: # result file exists
 		# load result data and return it
-		resultFile = open(resultPath, 'r') 
+		taskResultFile = open(taskResultPath, 'r') 
 		
-	except IOError as e: # result file does not exist
-		try: # input file exists
-			findPrimersFromFile(inputPath, resultPath, 'better')
+	except IOError as e: # task result file does not exist
+		try: # task file exists
+			findPrimersFromFile(taskPath, taskResultPath)
 		except Exception as e: # input file does not exist
 			abort(404)
 		else: 
-			resultFile = open(resultPath, 'r')
-			result = json.load(resultFile)
-			return jsonify(result)
+			taskResultFile = open(taskResultPath, 'r')
+			taskResult = json.load(taskResultFile)
+			return jsonify(taskResult)
 
-	else: # no exception
-		try:
-			result = json.load(resultFile)
-		except Exception as e:
-			raise Exception('result file is broken')
-		else:
-			return jsonify(result)
+	try:
+		taskResult = json.load(taskResultFile)
+	except Exception as e:
+		raise Exception('task result file is broken')
+	
+	return jsonify(taskResult)
 
 
 @app.route('/', methods = ['POST'])
 def add_task():
 	""" Handle POST request to add an new primer3 task
 	Returns:
-		Url of the result
+		URL of the task result
 	"""
 
-	requestedTask = request.json
+	newTask = request.json
+
+	# input_data key doesn't exist
+	if not 'input_data' in newTask:
+		return jsonify( { 'status':'error', 'error_statement': 'task JSON doesn\'t have input_data field'} ), 400
 
 	# make a new task ID
 	task_id = idGenerator()
 
-	inputPath = 'cache/'+task_id+'_input.json'
-
-	try:
-		inputData = requestedTask['input_data']
-	except KeyError as e: # input_data doesn't exist
-		return jsonify( { 'status':'error', 'error_statement': 'task JSON doesn\'t have input_data field'} ), 400
+	newTaskPath = 'cache/'+task_id+'_task.json'
 
 	# save input data as json file
-	with open(inputPath, 'w') as outfile:
-		json.dump(requestedTask['input_data'], outfile)
+	with open(newTaskPath, 'w') as newTaskFile:
+		json.dump(newTask, newTaskFile)
 
 	print("New task (ID:{}) added".format(task_id))
 
