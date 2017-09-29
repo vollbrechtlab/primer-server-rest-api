@@ -71,7 +71,7 @@ def createBetterResult(result):
 	return betterResult
 
 
-def findPrimers(inputData, resultFormat="better"):
+def findPrimers(inputData, resultFormat="raw"):
 	""" return primer3 result with given format
 	Args: 
 		param1: input data
@@ -117,7 +117,7 @@ def findPrimersFromFile(taskPath, taskResultPath):
 		if 'format' in task:
 			taskResult['result'] = findPrimers(task['input_data'], task['format'])
 		else:
-			taskResult['result'] = findPrimers(task['input_data'], task['format'])
+			taskResult['result'] = findPrimers(task['input_data'])
 	
 	except Exception as e:
 		taskResult['status'] = 'error'

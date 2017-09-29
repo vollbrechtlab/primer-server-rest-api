@@ -57,6 +57,8 @@ def get_result(task_id):
 	taskPath = 'cache/'+task_id+'_task.json'
 	taskResultPath = 'cache/'+task_id+'_taskResult.json'
 
+	
+
 	try: # result file exists
 		# load result data and return it
 		taskResultFile = open(taskResultPath, 'r') 
