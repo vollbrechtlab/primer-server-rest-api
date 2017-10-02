@@ -68,6 +68,18 @@ def test_ok():
 	r = requests.post(url, data=json.dumps(task), headers={'content-type': 'application/json'})
 	pprint(r.json())
 
+def test_ok2():
+	url = 'http://localhost:5000'
+	task = {
+		'format':'better',
+		'input_data': {
+			'SEQUENCE_TEMPLATE': 'ACAAGATGCCATTGTCCCCCGGCCTCCTGCTGCTGCTGCTCTCCGGGGCCACGGCCACCGCTGCCCTGCCCCTGGAGGGTGGCCCCACCGGCCGAGACAGCGAGCATATGCAGGAAGCGGCAGGAATAAGGAAAAGCAGCCTCCTGACTTTCCTCGCTTGGTGGTTTGAGTGGACCTCCCAGGCCAGTGCCGGGCCCCTCATAGGAGAGGAAGCTCGGGAGGTGGCCAGGCGGCAGGAAGGCGCACCCCCCCAGCAATCCGCGCGCCGGGACAGAATGCCCTGCAGGAACTTCTTCTGGAAGACCTTCTCCTCCTGCAAATAAAACCTCACCCATGAATGCTCACGCAAGTTTAATTACAGACCTGAA',
+		}
+	}
+
+	r = requests.post(url, data=json.dumps(task), headers={'content-type': 'application/json'})
+	pprint(r.json())
+
 def test_ok_bigdata():
 	url = 'http://localhost:5000'
 	testSqFile = open('test_seq.txt', 'r')
@@ -95,4 +107,4 @@ def test_ok_bigdata_raw():
 	pprint(r.json())	
 
 if __name__ == '__main__':
-	test_ok_bigdata_raw()
+	test_ok()

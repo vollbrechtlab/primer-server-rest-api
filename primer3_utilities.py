@@ -85,7 +85,7 @@ def findPrimers(inputData, resultFormat="raw"):
 	try:
 		result = designPrimers(p3pyInputData['seq_args'], p3pyInputData['global_args'])
 	except: # input data is broken
-		raise Exception('input data does not have correct parameters')
+		raise Exception('input data is broken')
 
 	if resultFormat == "better":
 		return createBetterResult(result);
@@ -93,12 +93,14 @@ def findPrimers(inputData, resultFormat="raw"):
 	return result
 
 
-def findPrimersFromFile(taskPath, taskResultPath):
+def findPrimersFile(taskId):
 	""" Create a primer3 result in a better format
 	Args: 
-		param1: input json location
-		param2: output json location
+		param1: task ID
 	"""
+
+	taskPath = 'cache/'+taskId+'_task.json'
+	taskResultPath = 'cache/'+taskId+'_taskResult.json'
 
 	taskFile = None
 	try: 
@@ -110,7 +112,7 @@ def findPrimersFromFile(taskPath, taskResultPath):
 	try: # try to load input json file
 		task = json.load(taskFile)
 	except:
-		raise Exception('input JSON data is broken')
+		raise Exception('input data is broken')
 
 	taskResult = {}
 	try: # try to get result
@@ -131,4 +133,18 @@ def findPrimersFromFile(taskPath, taskResultPath):
 		json.dump(taskResult, newTaskResultFile, sort_keys = True, indent = 4, ensure_ascii = False)
 
 	
-		
+def saveTask(newTask, taskId):
+	""" Save a task to a file
+	"""
+
+	newTaskPath = 'cache/'+taskId+'_task.json'
+
+	# save input data as json file
+	with open(newTaskPath, 'w') as newTaskFile:
+		json.dump(newTask, newTaskFile)
+
+	print("New task (ID:{}) added".format(taskId))
+
+
+def openTaskResultFile(taskId):
+	return open('cache/'+taskId+'_taskResult.json', 'r') 
