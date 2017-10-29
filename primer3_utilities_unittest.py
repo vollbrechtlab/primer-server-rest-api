@@ -38,10 +38,12 @@ testResultRaw = readJson('test_result_raw.json')
 #print(task["input_data"]["PRIMER_PICK_LEFT_PRIMER"])
 
 class Primer3UtilitiesTest(unittest.TestCase):
-	""" test for primer3 utilities"""
+	""" test for primer3 utilities """
+	"""
 	def testRaw(self):
 		result = findPrimers(testTask["input_data"])
 		self.assertEqual(result['PRIMER_LEFT_2_SEQUENCE'], "CCTGGAGGGTGGCCC")
+	"""
 
 	def testBetter(self):
 		result = findPrimers(testTask["input_data"], testTask['format'])
@@ -49,6 +51,11 @@ class Primer3UtilitiesTest(unittest.TestCase):
 		self.assertEqual(result['pairs'][4]['PRIMER_LEFT']['SEQUENCE'], 'CCTGGAGGGTGGCCC')
 		self.assertEqual(result['pairs'][0]['PRIMER_RIGHT']['SEQUENCE'], 'TCAAACCACCAAGCGAGGA')
 		self.assertEqual(result['pairs'][0]['PRIMER_RIGHT']['SEQUENCE'], 'TCAAACCACCAAGCGAGGA')
-		printJson(result)
+	"""
+	def testInternalOligoBetter(self):
+		testTask["input_data"]["PRIMER_PICK_INTERNAL_OLIGO"] = True
+		result = findPrimers(testTask["input_data"], testTask['format'])
+		self.assertTrue(result['pairs'][0]['PRIMER_INTERNAL']['SEQUENCE'] is not None)
+	"""
 		
 unittest.main()
