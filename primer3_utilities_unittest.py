@@ -51,11 +51,15 @@ class Primer3UtilitiesTest(unittest.TestCase):
 		self.assertEqual(result['pairs'][4]['PRIMER_LEFT']['SEQUENCE'], 'CCTGGAGGGTGGCCC')
 		self.assertEqual(result['pairs'][0]['PRIMER_RIGHT']['SEQUENCE'], 'TCAAACCACCAAGCGAGGA')
 		self.assertEqual(result['pairs'][0]['PRIMER_RIGHT']['SEQUENCE'], 'TCAAACCACCAAGCGAGGA')
-	"""
+
 	def testInternalOligoBetter(self):
 		testTask["input_data"]["PRIMER_PICK_INTERNAL_OLIGO"] = True
 		result = findPrimers(testTask["input_data"], testTask['format'])
 		self.assertTrue(result['pairs'][0]['PRIMER_INTERNAL']['SEQUENCE'] is not None)
-	"""
+
+	def testNoRightPrimer(self):
+		testTask["input_data"]["PRIMER_PICK_RIGHT_PRIMER"] = False
+		result = findPrimers(testTask["input_data"], testTask['format'])
+		self.assertTrue(result['pairs'][0]['PRIMER_INTERNAL']['SEQUENCE'] is not None)
 		
 unittest.main()

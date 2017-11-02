@@ -42,8 +42,15 @@ def createBetterResult(result):
 	betterResult = {}
 	betterResult['pairs'] = []
 
-	for i in range(result['PRIMER_PAIR_NUM_RETURNED']):
+	print('pair:', result['PRIMER_PAIR_NUM_RETURNED'])
+	print('left:', result['PRIMER_LEFT_NUM_RETURNED'])
+	print('right:', result['PRIMER_RIGHT_NUM_RETURNED'])
+	print('internal:', result['PRIMER_INTERNAL_NUM_RETURNED'])
+
+	for i in range(max([result['PRIMER_PAIR_NUM_RETURNED'],result['PRIMER_LEFT_NUM_RETURNED'],result['PRIMER_RIGHT_NUM_RETURNED'],result['PRIMER_INTERNAL_NUM_RETURNED']])):
 		betterResult['pairs'].append({});
+
+	for i in range(result['PRIMER_PAIR_NUM_RETURNED']):
 		betterResult['pairs'][i]['COMPL_ANY_TH'] = result['PRIMER_PAIR_{}_COMPL_ANY_TH'.format(i)]
 		betterResult['pairs'][i]['COMPL_END_TH'] = result['PRIMER_PAIR_{}_COMPL_END_TH'.format(i)]
 		betterResult['pairs'][i]['PENALLTY'] = result['PRIMER_PAIR_{}_PENALTY'.format(i)]
