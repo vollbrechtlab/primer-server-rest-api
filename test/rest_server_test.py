@@ -17,7 +17,7 @@ def test_bad():
 	pprint(r.json())
 
 def test_ok():
-	url = 'http://localhost:5000'
+	url = 'http://localhost:8001'
 	task = {
 		'task_info': {
 			'format':'better'
@@ -43,7 +43,7 @@ def test_ok():
 	pprint(r.json())
 
 def test_ok2():
-	url = 'http://localhost:5000'
+	url = 'http://localhost:8001'
 	testSqFile = open('test_seq.txt', 'r')
 	task = {
 		'task_info': {
@@ -85,4 +85,4 @@ def test_ok_dev_server():
 	pprint(r.json())
 
 if __name__ == '__main__':
-	test_ok2()
+	test_ok()
