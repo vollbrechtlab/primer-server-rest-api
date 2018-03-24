@@ -3,22 +3,26 @@
 """
 	Author: Takao Shibamoto
 	Date: 9/18/2017
-	Description: Rest server with only POST 
+	Description: REST server with only POST 
 """
 
-import json, os
+import json, os, random, string
 from flask import Flask, jsonify, abort, request, make_response, url_for, send_file, send_from_directory, Response
-from primer3_utilities import *
 from flask_cors import CORS
-from rest_server_utility import *
+
+from primer3_utilities import *
+
 
 # Flask app
 app = Flask(__name__, static_url_path = "")
 CORS(app)
 
-# create cache folder if doesnt exist
+# create cache folder if it doesnt exist yet
 if not os.path.exists("cache"):
     os.makedirs("cache")
+
+def idGenerator(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))
 
 """ Error Handling """
 
@@ -41,64 +45,65 @@ def not_found(error):
 def welcome():
 	""" Say welcome
 	"""
-	return "Welcome to our primer3 rest API"
+	return "Welcome to our primer3 REST API"
 
 
-@app.route('/result/<string:task_id>', methods = ['GET'])
-def get_result(task_id):
+@app.route('/result/<string:taskId>', methods = ['GET'])
+def get_result(taskId):
 	""" Handle GET request to get a specific result
 		Calculate the primer and return it
 	Args:
 		param1: Task ID
 	Returns:
-		JSON of the result
+		JSON of the task result
 	"""
 
-	inputPath = 'cache/'+task_id+'_input.json'
-	resultPath = 'cache/'+task_id+'_result.json'
-
-	try: # result file exists
+	try: # result file exists in cache already
 		# load result data and return it
-		resultFile = open(resultPath, 'r')
-		result = json.load(resultFile)
-		return jsonify(result)
-	except Exception as e: # result file does not exist
-		try: # input file exists
-			findPrimersFromFile(inputPath, resultPath, "better")
-			resultFile = open(resultPath, 'r')
-			result = json.load(resultFile)
-			return jsonify(result)
+		taskResultFile = openTaskResultFile(taskId)
+		
+	except Exception as e: # task result file does not exist
+		try: # task file exists
+			findPrimersFile(taskId)
 		except Exception as e: # input file does not exist
-			taskResult = {}
-			taskResult['status'] = 'error'
-			taskResult['error_detail'] = str(e)
-			return jsonify(taskResult)
-		else:
 			abort(404)
+
+	# now task result file exists
+	taskResultFile = openTaskResultFile(taskId)
+
+	try: # load the task result from file
+		taskResult = json.load(taskResultFile)
+	except Exception as e:
+		return jsonify( { 'status':'error', 'error_statement': 'task result is broken'} ), 400
+	
+	return jsonify(taskResult)
 
 
 @app.route('/', methods = ['POST'])
 def add_task():
 	""" Handle POST request to add an new primer3 task
 	Returns:
-		Url of the result
+		URL of the task result url
 	"""
 
-	requestedTask = request.json
+	newTask = request.json
+
+	# input_data key doesn't exist
+	if not 'input_data' in newTask:
+		return jsonify( { 'status':'error', 'error_statement': 'task doesn\'t have input_data field'} ), 400
+
+	# SEQUENCE_TEMPLATE key doesn't exist
+	if not 'SEQUENCE_TEMPLATE' in newTask['input_data']:
+		return jsonify( { 'status':'error', 'error_statement': 'task[\"input_data\"] JSON doesn\'t have SEQUENCE_TEMPLATE field'} ), 400
 
 	# make a new task ID
-	task_id = idGenerator()
+	taskId = idGenerator()
 
-	inputPath = 'cache/'+task_id+'_input.json'
-
-	# save input data as json file
-	with open(inputPath, 'w') as outfile:
-		json.dump(requestedTask['input_data'], outfile, sort_keys = True, indent = 4, ensure_ascii = False)
-
-	print("New task (ID:{}) added".format(task_id))
+	saveTask(newTask, taskId)
 
 	# return the URL of the result
-	return jsonify( { 'result_url': url_for('get_result', task_id = task_id, _external = True), 'status': 'ok' } ), 201
+	return jsonify( { 'status': 'ok', 'result_url': url_for('get_result', taskId = taskId, _external = True) } ), 201
+
 
 if __name__ == '__main__':
 	app.run(debug = True, port=5000)
