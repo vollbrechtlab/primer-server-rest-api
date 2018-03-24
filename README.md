@@ -10,11 +10,12 @@ source venv/bin/activate
 ```
 ### Give permission to scripts
 ```shell
-chmod +x .sh
+chmod +x *.sh
 ```
 
 ## How to run
 ```shell
+# Simple way to run server
 python3 rest_server.py
 
 # or use this script to run server using gunicorn

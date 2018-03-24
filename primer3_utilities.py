@@ -15,7 +15,7 @@ def printJson(data):
 def transformInput(data):
 	""" separate input to seq_args and global_args
 	Args: 
-		param1: input data
+		data: input data
 	Returns:
 		separated input data
 	"""
@@ -34,7 +34,7 @@ def transformInput(data):
 def createBetterResult(result):
 	""" Create a primer3 result in a better format
 	Args: 
-		param1: primer3 result
+		result: primer3 result
 	Returns:
 		better result
 	"""
@@ -100,8 +100,8 @@ def createBetterResult(result):
 def findPrimers(inputData, resultFormat="raw"):
 	""" return primer3 result with given format
 	Args: 
-		param1: input data
-		param2: result format (raw/better)
+		inputData: input data
+		resultFormat: result format (raw/better)
 	Returns:
 		result
 	"""
@@ -122,7 +122,7 @@ def findPrimers(inputData, resultFormat="raw"):
 def findPrimersFile(taskId):
 	""" Create a primer3 result in a better format
 	Args: 
-		param1: task ID
+		taskId: task ID
 	"""
 
 	taskPath = 'cache/'+taskId+'_task.json'
