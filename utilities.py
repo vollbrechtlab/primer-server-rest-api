@@ -7,7 +7,7 @@
 """
 
 from primer3.bindings import designPrimers
-import json
+import json, random, string
 
 def printJson(data):
 	print(json.dumps(data, sort_keys=True, indent=4))
@@ -97,7 +97,7 @@ def createBetterResult(result):
 	return betterResult
 
 
-def findPrimers(inputData, resultFormat="raw"):
+def findPrimers(inputData, resultFormat="better"):
 	""" return primer3 result with given format
 	Args: 
 		inputData: input data
@@ -114,7 +114,7 @@ def findPrimers(inputData, resultFormat="raw"):
 		raise Exception('input data is broken')
 
 	if resultFormat == "better":
-		return createBetterResult(result);
+		return createBetterResult(result)
 
 	return result
 
@@ -161,6 +161,9 @@ def findPrimersFile(taskId):
 	
 def saveTask(newTask, taskId):
 	""" Save a task to a file
+	Args:
+		newTask: new task name
+		taskId: new task ID
 	"""
 
 	newTaskPath = 'cache/'+taskId+'_task.json'
@@ -172,5 +175,14 @@ def saveTask(newTask, taskId):
 	print("New task (ID:{}) added".format(taskId))
 
 
-def openTaskResultFile(taskId):
-	return open('cache/'+taskId+'_taskResult.json', 'r') 
+def loadTaskFile(taskId):
+	return json.load(open('cache/'+taskId+'_task.json', 'r'))
+
+
+def loadTaskResultFile(taskId):
+	return json.load(open('cache/'+taskId+'_taskResult.json', 'r'))
+
+
+def idGenerator(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))
+

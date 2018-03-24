@@ -3,7 +3,7 @@ import requests
 from pprint import pprint
 
 def test_bad():
-	url = 'http://localhost:5000'
+	url = 'http://localhost:8001/v1.01/'
 	task = {
 		'task_info': {
 			'email':'test1@example.com'
@@ -17,7 +17,7 @@ def test_bad():
 	pprint(r.json())
 
 def test_ok():
-	url = 'http://localhost:8001'
+	url = 'http://localhost:8001/v1.01/'
 	task = {
 		'task_info': {
 			'format':'better'
@@ -43,7 +43,7 @@ def test_ok():
 	pprint(r.json())
 
 def test_ok2():
-	url = 'http://localhost:8001'
+	url = 'http://localhost:8001/v1.01/'
 	testSqFile = open('test_seq.txt', 'r')
 	task = {
 		'task_info': {
