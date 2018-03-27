@@ -2,18 +2,21 @@
 Simple, single-threaded, no database rest API for primer3
 
 ## Setup
-### Setup virtual environment
 ```shell
+# install virtual environment if not yet
 sudo pip3 install virtualenv
+
+# create a virtual environment
 virtualenv -p python3 venv
+
+# activate the virtual environment
 source venv/bin/activate
-```
-### Give permission to scripts
-```shell
+
+# Give permission to the scripts
 chmod +x scripts/*.sh
 ```
 
-## How to run
+### Useage
 ```shell
 # Simple way to run server
 python3 rest_server.py
@@ -23,9 +26,8 @@ scripts/start_server.sh
 
 # or use this script to run server as gunicorn deamon
 scripts/start_server_deamon.sh
-```
 
-## How to stop deamon
-```shell
+# stop deamon
 scripts/stop_server_deamon.sh
 ```
+
