@@ -18,6 +18,9 @@ virtualenv -p python3 venv
 # activate the virtual environment
 source venv/bin/activate
 
+# install packages
+pip3 install -r requirements.txt
+
 # Give permission to the scripts
 chmod +x scripts/*.sh
 ```
