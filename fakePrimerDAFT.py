@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 
 """
-Excute primer3, format output
+Simulates primerDAFT
 """
 
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
-__date__ = "9/30/2017"
+__date__ = "3/27/2018"
 __version__ = "1.01"
 
 
 from primer3.bindings import designPrimers
-import json, random, string
-
-def printJson(data):
-    print(json.dumps(data, sort_keys=True, indent=4))
+import json, random, string, time
 
 def transformInput(data):
     """ separate input to seq_args and global_args
@@ -123,25 +120,7 @@ def findPrimers(primer3Data, resultFormat="better"):
     return result
 
 
-def findPrimersWithTaskId(taskId):
-    taskFile = None
-    try: 
-        taskFile = open('cache/'+taskId+'_task.json', 'r')
-    except IOError as e:
-        raise Exception("task file does not exist")
-
-    task = None
-    try: 
-        # load task json file
-        task = json.load(taskFile)
-    except:
-        raise Exception('task data is broken')
-
-    result = makeResult(task)
-
-    saveResult(result)
-
-def makeResult(task):
+def run(task):
     result = {}
     try: # try to get result
         if 'format' in task:
@@ -156,45 +135,7 @@ def makeResult(task):
     else: # no problem
         result['status'] = 'ok'
 
+    time.sleep(random.randint(1,5))
+
     return result
-
-
-def saveResult(result):
-    resultPath = 'cache/'+taskId+'_result.json'
-    # save the result to a file
-    with open(resultPath, 'w') as resultFile:
-        json.dump(result, resultFile, sort_keys = True, indent = 4, ensure_ascii = False)
-
-    
-def saveTask(task):
-    """ Save a task to a file
-    Args:
-        newTask: new task name
-        taskId: new task ID
-    """
-
-    # make a new task ID
-    taskId = idGenerator()
-    taskPath = 'cache/'+taskId+'_task.json'
-    #task['taskId'] = taskId
-
-    # save input data as json file
-    with open(taskPath, 'w') as taskFile:
-        json.dump(task, taskFile)
-
-    print("New task (ID:{}) added".format(taskId))
-
-    return taskId
-
-
-def loadTaskFile(taskId):
-    return json.load(open('cache/'+taskId+'_task.json', 'r'))
-
-
-def loadResultFile(taskId):
-    return json.load(open('cache/'+taskId+'_result.json', 'r'))
-
-
-def idGenerator(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
-
+ 
