@@ -1,16 +1,19 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 
 """
-	Author: Takao Shibamoto
-	Date: 9/18/2017
-	Description: REST server with only POST 
+REST server with only POST 
 """
 
-import json, os, random, string
+__author__ = "Takao Shibamoto"
+__copyright__ = "Copyright 2017, Vollbrecht Lab"
+__date__ = "9/18/2017"
+__version__ = "1.01"
+
+import json, os
 from flask import Flask, jsonify, abort, request, make_response, url_for, send_file, send_from_directory, Response
 from flask_cors import CORS
 
-from primer3_utilities import *
+from utilities import *
 
 
 # Flask app
@@ -20,9 +23,6 @@ CORS(app)
 # create cache folder if it doesnt exist yet
 if not os.path.exists("cache"):
     os.makedirs("cache")
-
-def idGenerator(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
-	return ''.join(random.choice(chars) for _ in range(size))
 
 """ Error Handling """
 
@@ -41,14 +41,14 @@ def not_found(error):
 
 """ Route handling """
 	
-@app.route('/', methods = ['GET'])
+@app.route('/v1.01/', methods = ['GET'])
 def welcome():
 	""" Say welcome
 	"""
 	return "Welcome to our primer3 REST API"
 
 
-@app.route('/result/<string:taskId>', methods = ['GET'])
+@app.route('/v1.01/result/<string:taskId>', methods = ['GET'])
 def get_result(taskId):
 	""" Handle GET request to get a specific result
 		Calculate the primer and return it
@@ -60,7 +60,7 @@ def get_result(taskId):
 
 	try: # result file exists in cache already
 		# load result data and return it
-		taskResultFile = openTaskResultFile(taskId)
+		taskResultFile = loadTaskResultFile(taskId)
 		
 	except Exception as e: # task result file does not exist
 		try: # task file exists
@@ -68,20 +68,19 @@ def get_result(taskId):
 		except Exception as e: # input file does not exist
 			abort(404)
 
-	# now task result file exists
-	taskResultFile = openTaskResultFile(taskId)
-
 	try: # load the task result from file
-		taskResult = json.load(taskResultFile)
+		taskResult = {}
+		taskResult['result'] = loadTaskResultFile(taskId)
+		taskResult['task'] = loadTaskFile(taskId)
 	except Exception as e:
 		return jsonify( { 'status':'error', 'error_statement': 'task result is broken'} ), 400
 	
 	return jsonify(taskResult)
 
 
-@app.route('/', methods = ['POST'])
+@app.route('/v1.01/', methods = ['POST'])
 def add_task():
-	""" Handle POST request to add an new primer3 task
+	""" Handle POST request to add a new primer3 task
 	Returns:
 		URL of the task result url
 	"""
@@ -106,6 +105,5 @@ def add_task():
 
 
 if __name__ == '__main__':
-	app.run(debug = True, port=5000)
-	#app.run(host='0.0.0.0', port='5000')
-
+	app.run(debug = True, port=8001)
+	#app.run(host='0.0.0.0', port='8001')

@@ -1,13 +1,17 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 
 """
-	Author: Takao Shibamoto
-	Date: 9/30/2017
-	Description: Excute primer3, format output
+Excute primer3, format output
 """
+
+__author__ = "Takao Shibamoto"
+__copyright__ = "Copyright 2017, Vollbrecht Lab"
+__date__ = "9/30/2017"
+__version__ = "1.01"
+
 
 from primer3.bindings import designPrimers
-import json
+import json, random, string
 
 def printJson(data):
 	print(json.dumps(data, sort_keys=True, indent=4))
@@ -15,7 +19,7 @@ def printJson(data):
 def transformInput(data):
 	""" separate input to seq_args and global_args
 	Args: 
-		param1: input data
+		data: input data
 	Returns:
 		separated input data
 	"""
@@ -34,7 +38,7 @@ def transformInput(data):
 def createBetterResult(result):
 	""" Create a primer3 result in a better format
 	Args: 
-		param1: primer3 result
+		result: primer3 result
 	Returns:
 		better result
 	"""
@@ -97,11 +101,11 @@ def createBetterResult(result):
 	return betterResult
 
 
-def findPrimers(inputData, resultFormat="raw"):
+def findPrimers(inputData, resultFormat="better"):
 	""" return primer3 result with given format
 	Args: 
-		param1: input data
-		param2: result format (raw/better)
+		inputData: input data
+		resultFormat: result format (raw/better)
 	Returns:
 		result
 	"""
@@ -114,7 +118,7 @@ def findPrimers(inputData, resultFormat="raw"):
 		raise Exception('input data is broken')
 
 	if resultFormat == "better":
-		return createBetterResult(result);
+		return createBetterResult(result)
 
 	return result
 
@@ -122,7 +126,7 @@ def findPrimers(inputData, resultFormat="raw"):
 def findPrimersFile(taskId):
 	""" Create a primer3 result in a better format
 	Args: 
-		param1: task ID
+		taskId: task ID
 	"""
 
 	taskPath = 'cache/'+taskId+'_task.json'
@@ -161,6 +165,9 @@ def findPrimersFile(taskId):
 	
 def saveTask(newTask, taskId):
 	""" Save a task to a file
+	Args:
+		newTask: new task name
+		taskId: new task ID
 	"""
 
 	newTaskPath = 'cache/'+taskId+'_task.json'
@@ -172,5 +179,14 @@ def saveTask(newTask, taskId):
 	print("New task (ID:{}) added".format(taskId))
 
 
-def openTaskResultFile(taskId):
-	return open('cache/'+taskId+'_taskResult.json', 'r') 
+def loadTaskFile(taskId):
+	return json.load(open('cache/'+taskId+'_task.json', 'r'))
+
+
+def loadTaskResultFile(taskId):
+	return json.load(open('cache/'+taskId+'_taskResult.json', 'r'))
+
+
+def idGenerator(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))
+
