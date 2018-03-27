@@ -1,10 +1,13 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 
 """
-	Author: Takao Shibamoto
-	Date: 9/18/2017
-	Description: REST server with only POST 
+REST server with only POST 
 """
+
+__author__ = "Takao Shibamoto"
+__copyright__ = "Copyright 2017, Vollbrecht Lab"
+__date__ = "9/18/2017"
+__version__ = "1.01"
 
 import json, os
 from flask import Flask, jsonify, abort, request, make_response, url_for, send_file, send_from_directory, Response

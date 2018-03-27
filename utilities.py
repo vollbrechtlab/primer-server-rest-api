@@ -1,10 +1,14 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 
 """
-	Author: Takao Shibamoto
-	Date: 9/30/2017
-	Description: Excute primer3, format output
+Excute primer3, format output
 """
+
+__author__ = "Takao Shibamoto"
+__copyright__ = "Copyright 2017, Vollbrecht Lab"
+__date__ = "9/30/2017"
+__version__ = "1.01"
+
 
 from primer3.bindings import designPrimers
 import json, random, string
