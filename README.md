@@ -10,7 +10,7 @@ source venv/bin/activate
 ```
 ### Give permission to scripts
 ```shell
-chmod +x *.sh
+chmod +x scripts/*.sh
 ```
 
 ## How to run
@@ -19,13 +19,13 @@ chmod +x *.sh
 python3 rest_server.py
 
 # or use this script to run server using gunicorn
-./start_server.sh
+scripts/start_server.sh
 
 # or use this script to run server as gunicorn deamon
-./start_server_deamon.sh
+scripts/start_server_deamon.sh
 ```
 
-# How to stop deamon
+## How to stop deamon
 ```shell
-./stop_server_deamon.sh
+scripts/stop_server_deamon.sh
 ```
