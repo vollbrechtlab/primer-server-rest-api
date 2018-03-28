@@ -8,7 +8,7 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.01"
+__version__ = "1.02"
 
 
 import json, os
@@ -101,11 +101,11 @@ def addTask():
     task = request.json
 
     # input_data key doesn't exist
-    if not 'input_data' in task:
-        return jsonify( { 'status':'error', 'error_statement': 'task doesn\'t have input_data field'} ), 400
+    if not 'primer3_data' in task:
+        return jsonify( { 'status':'error', 'error_statement': 'task doesn\'t have primer3_data field'} ), 400
 
     # SEQUENCE_TEMPLATE key doesn't exist
-    if not 'SEQUENCE_TEMPLATE' in task['input_data']:
+    if not 'SEQUENCE_TEMPLATE' in task['primer3_data']:
         return jsonify( { 'status':'error', 'error_statement': 'task[\"input_data\"] JSON doesn\'t have SEQUENCE_TEMPLATE field'} ), 400
 
     taskId = idGenerator()

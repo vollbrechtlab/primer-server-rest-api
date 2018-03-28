@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+
+"""
+A thread to find primers from task
+"""
+
+__author__ = "Takao Shibamoto"
+__copyright__ = "Copyright 2017, Vollbrecht Lab"
+__date__ = "3/27/2018"
+__version__ = "1.02"
+
+
 import threading, json, string, random
 import fakePrimerDAFT
 
