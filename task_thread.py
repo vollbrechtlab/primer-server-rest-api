@@ -10,15 +10,23 @@ __date__ = "3/27/2018"
 __version__ = "1.02"
 
 
-import threading, json, string, random
+import threading, json, string, random, logging
 import fakePrimerDAFT
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler('task.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 def worker(task, taskId):
     """thread worker function"""
 
     saveTask(task, taskId)
     print('new task added: ' + taskId)
+    logger.info('new task added ' + taskId)
     
     result = {}
     result['status'] = 'in process'
@@ -27,6 +35,7 @@ def worker(task, taskId):
 
     result = fakePrimerDAFT.run(task)
     print('result made: ' + taskId)
+    logger.info('result made: ' + taskId)
 
     saveResult(result, taskId)
 
