@@ -44,14 +44,14 @@ def not_found(error):
 
 """ Route handling """
     
-@app.route('/v1.01/', methods = ['GET'])
+@app.route('/v1.02/', methods = ['GET'])
 def welcome():
     """ Say welcome
     """
     return "Welcome to our primer server REST API"
 
 
-@app.route('/v1.01/result/<string:taskId>', methods = ['GET'])
+@app.route('/v1.02/result/<string:taskId>', methods = ['GET'])
 def getResult(taskId):
     """ Handle GET request to get a specific result
         Calculate the primer and return it
@@ -91,7 +91,7 @@ def getResult(taskId):
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
     
 
-@app.route('/v1.01/', methods = ['POST'])
+@app.route('/v1.02/', methods = ['POST'])
 def addTask():
     """ Handle POST request to add a new primer3 task
     Returns:
