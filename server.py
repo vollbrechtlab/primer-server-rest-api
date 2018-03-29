@@ -85,7 +85,7 @@ def getResult(taskId):
             return jsonify(taskResult), 201
 
         elif result['status'] == 'error':
-            return jsonify( { 'status':'error', 'error_statement': result['error_statement']} ), 400
+            return jsonify( { 'status':'error', 'error_statement': result['error_statement']} ), 201
 
     except Exception as e:
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
