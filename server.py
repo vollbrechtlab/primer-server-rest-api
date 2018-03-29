@@ -8,7 +8,7 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.01"
+__version__ = "1.02"
 
 
 import json, os
@@ -44,14 +44,14 @@ def not_found(error):
 
 """ Route handling """
     
-@app.route('/v1.01/', methods = ['GET'])
+@app.route('/v1.02/', methods = ['GET'])
 def welcome():
     """ Say welcome
     """
     return "Welcome to our primer server REST API"
 
 
-@app.route('/v1.01/result/<string:taskId>', methods = ['GET'])
+@app.route('/v1.02/result/<string:taskId>', methods = ['GET'])
 def getResult(taskId):
     """ Handle GET request to get a specific result
         Calculate the primer and return it
@@ -85,13 +85,13 @@ def getResult(taskId):
             return jsonify(taskResult), 201
 
         elif result['status'] == 'error':
-            return jsonify( { 'status':'error', 'error_statement': result['error_statement']} ), 400
+            return jsonify( { 'status':'error', 'error_statement': result['error_statement']} ), 201
 
     except Exception as e:
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
     
 
-@app.route('/v1.01/', methods = ['POST'])
+@app.route('/v1.02/', methods = ['POST'])
 def addTask():
     """ Handle POST request to add a new primer3 task
     Returns:
@@ -101,11 +101,11 @@ def addTask():
     task = request.json
 
     # input_data key doesn't exist
-    if not 'input_data' in task:
-        return jsonify( { 'status':'error', 'error_statement': 'task doesn\'t have input_data field'} ), 400
+    if not 'primer3_data' in task:
+        return jsonify( { 'status':'error', 'error_statement': 'task doesn\'t have primer3_data field'} ), 400
 
     # SEQUENCE_TEMPLATE key doesn't exist
-    if not 'SEQUENCE_TEMPLATE' in task['input_data']:
+    if not 'SEQUENCE_TEMPLATE' in task['primer3_data']:
         return jsonify( { 'status':'error', 'error_statement': 'task[\"input_data\"] JSON doesn\'t have SEQUENCE_TEMPLATE field'} ), 400
 
     taskId = idGenerator()
@@ -115,5 +115,5 @@ def addTask():
     return jsonify( { 'status': 'ok', 'taskId': taskId} ), 201
 
 if __name__ == '__main__':
-    #app.run(debug = True, port=8001)
-    app.run(host='0.0.0.0', port='8001')
+    app.run(debug = True, port=8001)
+    #app.run(host='0.0.0.0', port='8001')

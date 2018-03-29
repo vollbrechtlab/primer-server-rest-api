@@ -124,9 +124,9 @@ def run(task):
     result = {}
     try: # try to get result
         if 'format' in task:
-            result['result'] = findPrimers(task['input_data'], task['format'])
+            result['result'] = findPrimers(task['primer3_data'], task['format'])
         else:
-            result['result'] = findPrimers(task['input_data'])
+            result['result'] = findPrimers(task['primer3_data'])
     
     except Exception as e:
         result['status'] = 'error'
@@ -135,7 +135,7 @@ def run(task):
     else: # no problem
         result['status'] = 'ok'
 
-    time.sleep(random.randint(1,5))
+    time.sleep(random.randint(3,8))
 
     return result
  
