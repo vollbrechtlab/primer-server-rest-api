@@ -7,7 +7,7 @@ git push origin dev
 # copy all dev except .git and venv to /tmp/primer-server-rest-api-tmp/
 rm -fR /tmp/primer-server-rest-api-tmp
 mkdir /tmp/primer-server-rest-api-tmp
-rsync -aP . /tmp/primer-server-rest-api-tmp/ --exclude=.git --exclude=venv --exclude=updateRepo.sh
+rsync -aP . /tmp/primer-server-rest-api-tmp/ --exclude=.git --exclude=venv --exclude=update_repo.sh
 
 # copy back all files in /tmp/primer-server-rest-api-tmp/ to master
 git checkout master
