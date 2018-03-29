@@ -8,25 +8,13 @@ It uses a separate thread for each task request.
 simple_primer3_server.py is simple, single-threaded, no database REST API for primer3
 
 ## Setup
-```shell
-# install virtual environment if not yet
-sudo pip3 install virtualenv
-
-# create a virtual environment
-virtualenv -p python3 venv
-
-# activate the virtual environment
-source venv/bin/activate
-
-# install packages
-pip3 install -r requirements.txt
-
-# Give permission to the scripts
-chmod +x scripts/*.sh
-```
+`./setup_env.sh`
 
 ## Useage
 ```shell
+# first, always activate the virtual environment
+source venv/bin/activate
+
 # Simple way to run server
 python3 server.py
 
