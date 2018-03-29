@@ -14,7 +14,7 @@ git checkout master
 mv .git /tmp/primer-server-rest-api-tmp/
 mv venv /tmp/primer-server-rest-api-tmp/
 rm -fR ./* ./.*
-cp -a /tmp/primer-server-rest-api-tmp/. ./
+mv -a /tmp/primer-server-rest-api-tmp/. ./
 git add --all .
 git commit -m "from dev"
 git push origin master
