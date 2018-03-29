@@ -11,6 +11,9 @@ rsync -aP . /tmp/primer-server-rest-api-tmp/ --exclude=.git --exclude=venv --exc
 
 # copy back all files in /tmp/primer-server-rest-api-tmp/ to master
 git checkout master
+-mv .git /tmp/primer-server-rest-api-tmp/
+-mv venv /tmp/primer-server-rest-api-tmp/
+-rm -fR .
 cp -a /tmp/primer-server-rest-api-tmp/. ./
 git add --all .
 git commit -m "from dev"
