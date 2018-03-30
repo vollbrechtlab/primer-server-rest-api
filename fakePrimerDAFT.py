@@ -135,7 +135,7 @@ def run(task):
     else: # no problem
         result['status'] = 'ok'
 
-    #time.sleep(random.randint(3,8))
+    time.sleep(random.randint(2,3))
 
     return result
  
