@@ -7,7 +7,6 @@ small utility functions
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "9/30/2017"
-__version__ = "1.02"
 
 import json, random, string
 

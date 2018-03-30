@@ -8,7 +8,7 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.02"
+__version__ = "1.03"
 
 
 import json, os
@@ -109,7 +109,8 @@ def addTask():
         return jsonify( { 'status':'error', 'error_statement': 'task[\"input_data\"] JSON doesn\'t have SEQUENCE_TEMPLATE field'} ), 400
 
     taskId = idGenerator()
-    startTask(task, taskId)
+    task['taskId'] = taskId
+    startTask(task)
 
     # return the id of the result
     return jsonify( { 'status': 'ok', 'taskId': taskId} ), 201

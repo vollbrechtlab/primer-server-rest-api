@@ -7,7 +7,6 @@ A thread to find primers from task
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.02"
 
 
 import threading, json, string, random, logging
@@ -21,12 +20,11 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-def worker(task, taskId):
+def worker(task):
     """thread worker function"""
 
-    saveTask(task, taskId)
-    print('new task added: ' + taskId)
-    logger.info('new task added ' + taskId)
+    saveTask(task)
+    logger.info('new task added ' + task['taskId'])
     
     result = {}
     result['status'] = 'in process'
@@ -34,14 +32,13 @@ def worker(task, taskId):
     saveResult(result, taskId)
 
     result = fakePrimerDAFT.run(task)
-    print('result made: ' + taskId)
-    logger.info('result made: ' + taskId)
+    logger.info('result made: ' + task['taskId'])
 
-    saveResult(result, taskId)
+    saveResult(result)
 
 
-def saveResult(result, taskId):
-    resultPath = 'cache/'+taskId+'_result.json'
+def saveResult(result):
+    resultPath = 'cache/'+result['taskId']+'_result.json'
     # save the result to a file
     with open(resultPath, 'w') as resultFile:
         json.dump(result, resultFile, sort_keys = True, indent = 4, ensure_ascii = False)
@@ -63,8 +60,8 @@ def saveTask(task, taskId):
     return taskId
 
 
-def startTask(task, taskId):
+def startTask(task):
 	threads = []
-	t = threading.Thread(target=worker, args=(task,taskId))
+	t = threading.Thread(target=worker, args=(task,))
 	threads.append(t)
 	t.start()
