@@ -8,7 +8,7 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.02"
+__version__ = "1.0.3"
 
 
 import json, os
@@ -17,6 +17,8 @@ from flask_cors import CORS
 
 from task_thread import *
 from utilities import *
+
+basicRoute = '/v'+__version__+'/'
 
 
 # Flask app
@@ -44,14 +46,14 @@ def not_found(error):
 
 """ Route handling """
     
-@app.route('/v1.02/', methods = ['GET'])
+@app.route(basicRoute, methods = ['GET'])
 def welcome():
     """ Say welcome
     """
     return "Welcome to our primer server REST API"
 
 
-@app.route('/v1.02/result/<string:taskId>', methods = ['GET'])
+@app.route(basicRoute+'result/<string:taskId>', methods = ['GET'])
 def getResult(taskId):
     """ Handle GET request to get a specific result
         Calculate the primer and return it
@@ -91,7 +93,7 @@ def getResult(taskId):
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
     
 
-@app.route('/v1.02/', methods = ['POST'])
+@app.route(basicRoute, methods = ['POST'])
 def addTask():
     """ Handle POST request to add a new primer3 task
     Returns:
@@ -109,7 +111,8 @@ def addTask():
         return jsonify( { 'status':'error', 'error_statement': 'task[\"input_data\"] JSON doesn\'t have SEQUENCE_TEMPLATE field'} ), 400
 
     taskId = idGenerator()
-    startTask(task, taskId)
+    task['taskId'] = taskId
+    startTask(task)
 
     # return the id of the result
     return jsonify( { 'status': 'ok', 'taskId': taskId} ), 201
