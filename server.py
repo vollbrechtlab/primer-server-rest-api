@@ -8,7 +8,7 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.03"
+__version__ = "1.0.3"
 
 
 import json, os

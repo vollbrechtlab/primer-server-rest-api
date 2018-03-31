@@ -16,7 +16,7 @@ mv venv /tmp/primer-server-rest-api-tmp/
 rm -fR ./* ./.*
 cp -a /tmp/primer-server-rest-api-tmp/. ./
 git add --all .
-git commit -m "from dev"
+git commit -m "$1"
 git push origin master
 
 # come back to dev
