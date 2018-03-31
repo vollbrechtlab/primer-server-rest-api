@@ -8,7 +8,7 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 
 import json, os
@@ -28,6 +28,10 @@ CORS(app)
 # create cache folder if it doesnt exist yet
 if not os.path.exists("cache"):
     os.makedirs("cache")
+
+# create log folder if it doesnt exist yet
+if not os.path.exists("logs"):
+    os.makedirs("logs")
 
 """ Error Handling """
 

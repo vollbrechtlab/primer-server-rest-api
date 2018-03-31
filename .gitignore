@@ -101,6 +101,5 @@ ENV/
 .mypy_cache/
 
 
-*_input.json
-*_result.json
 cache/
+logs/
