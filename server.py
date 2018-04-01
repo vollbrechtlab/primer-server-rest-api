@@ -8,7 +8,6 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.0.4"
 
 
 import json, os
@@ -18,6 +17,7 @@ from flask_cors import CORS
 from task_thread import *
 from utilities import *
 
+from version import __version__
 basicRoute = '/v'+__version__+'/'
 
 
@@ -28,10 +28,6 @@ CORS(app)
 # create cache folder if it doesnt exist yet
 if not os.path.exists("cache"):
     os.makedirs("cache")
-
-# create log folder if it doesnt exist yet
-if not os.path.exists("logs"):
-    os.makedirs("logs")
 
 """ Error Handling """
 
