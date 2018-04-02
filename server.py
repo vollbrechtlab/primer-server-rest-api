@@ -74,14 +74,16 @@ def getResult(taskId):
         if result['status'] == 'in process':
             return jsonify( { 'status':'in process'} ), 201
 
-        elif result['status'] == 'ok':
+        elif 'ok' in result['status']:
             # load task
             task = loadTaskFile(taskId)
 
             # make task result
             taskResult = {}
-            taskResult['status'] = 'ok'
+            taskResult['status'] = result['status']
             taskResult['result'] = result['result']
+            if result['status'] == 'all ok':
+                taskResult['specCheck_result'] = result['specCheck_result']
             taskResult['task'] = task
 
             return jsonify(taskResult), 201

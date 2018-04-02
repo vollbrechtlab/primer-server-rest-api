@@ -10,7 +10,7 @@ __date__ = "3/27/2018"
 
 
 import threading, json, string, random, logging, os
-import fakePrimerDAFT
+import primerDAFT
 
 # create log folder if it doesnt exist yet
 if not os.path.exists("logs"):
@@ -37,7 +37,7 @@ def worker(task):
 
     saveResult(result)
 
-    result = fakePrimerDAFT.run(task)
+    result = primerDAFT.run(task, "primer-dx.conf")
     result['taskId'] = task['taskId']
     print('result made: ' + result['taskId'])
     logger.info('result made: ' + result['taskId'])
