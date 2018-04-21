@@ -18,7 +18,6 @@ from task_thread import *
 from utilities import *
 
 from version import __version__
-basicRoute = '/v'+__version__+'/'
 
 
 # Flask app
@@ -46,14 +45,21 @@ def not_found(error):
 
 """ Route handling """
     
-@app.route(basicRoute, methods = ['GET'])
+@app.route('/', methods = ['GET'])
 def welcome():
     """ Say welcome
     """
-    return "Welcome to our primer server REST API"
+    return jsonify({"message":"Welcome to Primer Server REST API"}), 201
 
 
-@app.route(basicRoute+'result/<string:taskId>', methods = ['GET'])
+@app.route('/', methods = ['GET'])
+def getVersion():
+    """ return version
+    """
+    return jsonify({"version":__version__}), 201
+
+
+@app.route('/result/<string:taskId>', methods = ['GET'])
 def getResult(taskId):
     """ Handle GET request to get a specific result
         Calculate the primer and return it
@@ -95,7 +101,7 @@ def getResult(taskId):
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
     
 
-@app.route(basicRoute, methods = ['POST'])
+@app.route('/', methods = ['POST'])
 def addTask():
     """ Handle POST request to add a new primer3 task
     Returns:

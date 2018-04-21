@@ -37,7 +37,7 @@ def worker(task):
 
     saveResult(result)
 
-    result = primerDAFT.run(task, "primer-dx.conf")
+    result = primerDAFT.run(task, "pdaft.conf")
     result['taskId'] = task['taskId']
     print('result made: ' + result['taskId'])
     logger.info('result made: ' + result['taskId'])
