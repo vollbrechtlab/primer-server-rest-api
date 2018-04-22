@@ -25,7 +25,8 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 def worker(task):
-    """thread worker function"""
+    """thread worker function
+    """
 
     saveTask(task)
     print('new task added ' + task['taskId'])
@@ -55,8 +56,7 @@ def saveResult(result):
 def saveTask(task):
     """ Save a task to a file
     Args:
-        newTask: new task name
-        taskId: new task ID
+        task: task name
     """
 
     taskPath = 'cache/'+task['taskId']+'_task.json'

@@ -1,8 +1,6 @@
 from subprocess import call
-from version import __version__
 
-repoPath = '../primer-server/rest-api/'
-cpPath = repoPath + 'v' + __version__ + '/'
+cpPath = '../primer-server/rest-api/'
 print('copying files to {}'.format(cpPath))
 filesToCp = ['version.py', 'server.py', 'task_thread.py', 'utilities.py']
 

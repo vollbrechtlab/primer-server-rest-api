@@ -19,6 +19,9 @@ from utilities import *
 
 from version import __version__
 
+with open("supported_genomes.json", 'r') as f:
+    supportedGenomes = json.load(f)
+
 
 # Flask app
 app = Flask(__name__, static_url_path = "")
@@ -52,11 +55,15 @@ def welcome():
     return jsonify({"message":"Welcome to Primer Server REST API"}), 201
 
 
-@app.route('/', methods = ['GET'])
+@app.route('/version', methods = ['GET'])
 def getVersion():
     """ return version
     """
     return jsonify({"version":__version__}), 201
+
+@app.route('/genomes', methods = ['GET'])
+def getSupportedGenomes():
+    return jsonify(supportedGenomes), 201
 
 
 @app.route('/result/<string:taskId>', methods = ['GET'])
@@ -88,8 +95,6 @@ def getResult(taskId):
             taskResult = {}
             taskResult['status'] = result['status']
             taskResult['result'] = result['result']
-            if result['status'] == 'all ok':
-                taskResult['specCheck_result'] = result['specCheck_result']
             taskResult['task'] = task
 
             return jsonify(taskResult), 201
@@ -100,6 +105,22 @@ def getResult(taskId):
     except Exception as e:
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
     
+@app.route('/resultCSV/<string:taskId>', methods = ['GET'])
+def getResultCSV(taskId):
+    try:
+        csv = loadResultCSV(taskId)
+    except Exception as e:
+        try:
+            result = loadResultFile(taskId)
+            csv = primerDAFT.createCSV(result)
+        except Exception as e:
+            print(e)
+            abort(404)
+    response = make_response(csv, 201)
+    cd = 'attachment; filename='+taskId+'_result.csv'
+    response.headers['Content-Disposition'] = cd 
+    response.mimetype='text/csv'
+    return response
 
 @app.route('/', methods = ['POST'])
 def addTask():
