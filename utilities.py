@@ -18,6 +18,9 @@ def loadTaskFile(taskId):
 def loadResultFile(taskId):
     return json.load(open('cache/'+taskId+'_result.json', 'r'))
 
+def loadResultCSV(taskId):
+	return open('cache/'+taskId+'_result.csv', 'r')
+
 
 def idGenerator(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))

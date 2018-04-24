@@ -9,19 +9,24 @@ __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
 
 
-import threading, json, string, random, logging
-import fakePrimerDAFT
+import threading, json, string, random, logging, os
+import primerDAFT
+
+# create log folder if it doesnt exist yet
+if not os.path.exists("logs"):
+    os.makedirs("logs")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('task.log')
+handler = logging.FileHandler('logs/task.log')
 handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 def worker(task):
-    """thread worker function"""
+    """thread worker function
+    """
 
     saveTask(task)
     print('new task added ' + task['taskId'])
@@ -33,7 +38,7 @@ def worker(task):
 
     saveResult(result)
 
-    result = fakePrimerDAFT.run(task)
+    result = primerDAFT.run(task, "pdaft.conf")
     result['taskId'] = task['taskId']
     print('result made: ' + result['taskId'])
     logger.info('result made: ' + result['taskId'])
@@ -51,8 +56,7 @@ def saveResult(result):
 def saveTask(task):
     """ Save a task to a file
     Args:
-        newTask: new task name
-        taskId: new task ID
+        task: task name
     """
 
     taskPath = 'cache/'+task['taskId']+'_task.json'

@@ -8,7 +8,6 @@ It uses a separate thread for each task request.
 __author__ = "Takao Shibamoto"
 __copyright__ = "Copyright 2017, Vollbrecht Lab"
 __date__ = "3/27/2018"
-__version__ = "1.0.3"
 
 
 import json, os
@@ -18,7 +17,10 @@ from flask_cors import CORS
 from task_thread import *
 from utilities import *
 
-basicRoute = '/v'+__version__+'/'
+from version import __version__
+
+with open("supported_genomes.json", 'r') as f:
+    supportedGenomes = json.load(f)
 
 
 # Flask app
@@ -46,14 +48,25 @@ def not_found(error):
 
 """ Route handling """
     
-@app.route(basicRoute, methods = ['GET'])
+@app.route('/', methods = ['GET'])
 def welcome():
     """ Say welcome
     """
-    return "Welcome to our primer server REST API"
+    return jsonify({"message":"Welcome to Primer Server REST API"}), 201
 
 
-@app.route(basicRoute+'result/<string:taskId>', methods = ['GET'])
+@app.route('/version', methods = ['GET'])
+def getVersion():
+    """ return version
+    """
+    return jsonify({"version":__version__}), 201
+
+@app.route('/genomes', methods = ['GET'])
+def getSupportedGenomes():
+    return jsonify(supportedGenomes), 201
+
+
+@app.route('/result/<string:taskId>', methods = ['GET'])
 def getResult(taskId):
     """ Handle GET request to get a specific result
         Calculate the primer and return it
@@ -74,13 +87,13 @@ def getResult(taskId):
         if result['status'] == 'in process':
             return jsonify( { 'status':'in process'} ), 201
 
-        elif result['status'] == 'ok':
+        elif 'ok' in result['status']:
             # load task
             task = loadTaskFile(taskId)
 
             # make task result
             taskResult = {}
-            taskResult['status'] = 'ok'
+            taskResult['status'] = result['status']
             taskResult['result'] = result['result']
             taskResult['task'] = task
 
@@ -92,8 +105,24 @@ def getResult(taskId):
     except Exception as e:
         return jsonify( { 'status':'error', 'error_statement': 'result is broken'} ), 400
     
+@app.route('/resultCSV/<string:taskId>', methods = ['GET'])
+def getResultCSV(taskId):
+    try:
+        csv = loadResultCSV(taskId)
+    except Exception as e:
+        try:
+            result = loadResultFile(taskId)
+            csv = primerDAFT.createCSV(result)
+        except Exception as e:
+            print(e)
+            abort(404)
+    response = make_response(csv, 201)
+    cd = 'attachment; filename='+taskId+'_result.csv'
+    response.headers['Content-Disposition'] = cd 
+    response.mimetype='text/csv'
+    return response
 
-@app.route(basicRoute, methods = ['POST'])
+@app.route('/', methods = ['POST'])
 def addTask():
     """ Handle POST request to add a new primer3 task
     Returns:
