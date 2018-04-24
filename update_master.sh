@@ -18,10 +18,9 @@ git checkout master
 git pull
 
 # remove nessasary files
-rm .angular-cli.json .editorconfig .gitignore README.md deploy.js karma.conf.js package-lock.json package.json protractor.conf.js tsconfig.json tslint.json
-rm -R src
-rm -R e2e
-rm -R other_data
+rm .gitignore LICENSE README.md deploy_repo.py pdaft.conf requirements.txt server.py start_server.sh stop_server.sh supported_genomes.json task_thread.py utilities.py version.py
+rm -R primerDAFT
+rm -R tests
 
 # copy back all files in /tmp/primer-server-rest-api-tmp/ to master and push
 cp -a /tmp/primer-server-rest-api-tmp/. ./
